@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  whiteboards Whiteboard[]
+  sessions  WhiteboardSession[]
+}
+
+model Whiteboard {
+  id        String    @id @default(uuid())
+  name      String
+  imageData String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  sessions  WhiteboardSession[]
+}
+
+model WhiteboardSession {
+  id           String    @id @default(uuid())
+  whiteboardId String
+  userId       String
+  joinedAt     DateTime  @default(now())
+  leftAt       DateTime?
+  whiteboard   Whiteboard @relation(fields: [whiteboardId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+}
+
