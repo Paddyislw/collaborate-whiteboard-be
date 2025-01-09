@@ -5,18 +5,20 @@ import cors from 'cors';
 import { v4 as uuidv4 } from 'uuid';
 import prisma from './prisma';
 
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: CORS_ORIGIN,
     methods: ["GET", "POST"],
     credentials: true
   }
 });
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: CORS_ORIGIN,
   credentials: true
 }));
 app.use(express.json());
